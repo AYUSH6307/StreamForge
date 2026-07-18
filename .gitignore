@@ -216,3 +216,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+#SQLite Database
+backend/streamforge.db
+
+#Python
+.venv/
+__pycache__/
+*.pyc
