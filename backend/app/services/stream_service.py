@@ -49,3 +49,30 @@ def delete_stream(
     db.commit()
 
     return True
+
+def update_stream(
+    db: Session,
+    stream_id: int,
+    owner_id: int,
+    stream_data
+):
+    stream = db.query(Stream).filter(
+        Stream.id == stream_id
+    ).first()
+
+    if not stream:
+        return None
+
+    if stream.owner_id != owner_id:
+        return False
+
+    if stream_data.title is not None:
+        stream.title = stream_data.title
+
+    if stream_data.description is not None:
+        stream.description = stream_data.description
+
+    db.commit()
+    db.refresh(stream)
+
+    return stream

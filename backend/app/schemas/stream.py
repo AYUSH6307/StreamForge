@@ -14,3 +14,7 @@ class StreamResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class StreamUpdate(BaseModel):
+    title: str | None = None
+    description: str | None = None

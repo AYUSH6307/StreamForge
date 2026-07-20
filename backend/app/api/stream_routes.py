@@ -5,7 +5,8 @@ from app.core.database import get_db
 
 from app.schemas.stream import (
     StreamCreate,
-    StreamResponse
+    StreamResponse,
+    StreamUpdate
 )
 
 from app.services.dependencies import get_current_user
@@ -70,3 +71,33 @@ def remove_stream(
         return {"message": "Not allowed"}
 
     return {"message": "Stream deleted successfully"}
+
+
+@router.put("/{stream_id}",
+            response_model=StreamResponse)
+def edit_stream(
+    stream_id: int,
+    stream: StreamUpdate,
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    result = update_stream(
+        db,
+        stream_id,
+        current_user.id,
+        stream
+    )
+
+    if result is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Stream not found"
+        )
+
+    if result is False:
+        raise HTTPException(
+            status_code=403,
+            detail="Not allowed"
+        )
+
+    return result
