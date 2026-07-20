@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 
 from app.models.stream import Stream
 from app.schemas.stream import StreamCreate
+from app.services.kafka_service import send_stream_event
 
 
 def create_stream(
@@ -18,6 +19,14 @@ def create_stream(
     db.add(db_stream)
     db.commit()
     db.refresh(db_stream)
+    send_stream_event(
+    "stream_created",
+    {
+        "stream_id": db_stream.id,
+        "title": db_stream.title,
+        "owner_id": db_stream.owner_id
+    }
+)
 
     return db_stream
 
