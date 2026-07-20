@@ -76,3 +76,11 @@ def update_stream(
     db.refresh(stream)
 
     return stream
+
+def get_stream_by_id(
+    db: Session,
+    stream_id: int
+):
+    return db.query(Stream).filter(
+        Stream.id == stream_id
+    ).first()

@@ -1,7 +1,9 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+
+
 
 from app.schemas.stream import (
     StreamCreate,
@@ -11,8 +13,15 @@ from app.schemas.stream import (
 
 from app.services.dependencies import get_current_user
 #from app.services.stream_service import create_stream, get_all_streams
-from app.services.stream_service import (create_stream,get_all_streams,get_my_streams, delete_stream)
-
+#from app.services.stream_service import (create_stream,get_all_streams,get_my_streams, delete_stream)
+from app.services.stream_service import (
+    create_stream,
+    get_all_streams,
+    get_my_streams,
+    delete_stream,
+    update_stream,
+    get_stream_by_id
+)
 
 router = APIRouter(
     prefix="/streams",
@@ -50,6 +59,25 @@ def my_streams(
         db,
         current_user.id
     )
+
+@router.get("/{stream_id}",
+            response_model=StreamResponse)
+def get_stream(
+    stream_id: int,
+    db: Session = Depends(get_db)
+):
+    stream = get_stream_by_id(
+        db,
+        stream_id
+    )
+
+    if not stream:
+        raise HTTPException(
+            status_code=404,
+            detail="Stream not found"
+        )
+
+    return stream
 
 
 @router.delete("/{stream_id}")
