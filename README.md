@@ -324,6 +324,176 @@ app/models/stream.py
 ```
 
 ---
+# 🗄 Database Schema & Relationships
+
+The project currently uses SQLite as the primary database.
+
+Database File:
+
+```text
+streamforge.db
+```
+
+Future Upgrade:
+
+```text
+PostgreSQL
+```
+
+---
+
+## Users Table
+
+Stores registered user information.
+
+| Field | Type | Description |
+|---------|---------|---------|
+| id | Integer | Primary Key |
+| username | String | Unique Username |
+| email | String | Unique Email |
+| password | String | User Password |
+
+Example Record:
+
+```json
+{
+  "id": 1,
+  "username": "Ayush",
+  "email": "ayush@gmail.com"
+}
+```
+
+---
+
+## Streams Table
+
+Stores stream information created by users.
+
+| Field | Type | Description |
+|---------|---------|---------|
+| id | Integer | Primary Key |
+| title | String | Stream Title |
+| description | String | Stream Description |
+| owner_id | Integer | Owner User ID |
+
+Example Record:
+
+```json
+{
+  "id": 1,
+  "title": "Kafka Test Stream",
+  "description": "Testing Kafka Integration",
+  "owner_id": 1
+}
+```
+
+---
+
+# 🔗 Database Relationship
+
+Relationship between tables:
+
+```text
+Users
+  │
+  │ 1
+  │
+  ▼
+Streams
+  *
+```
+
+Meaning:
+
+```text
+One User
+     ↓
+Can Create Multiple Streams
+```
+
+Example:
+
+```text
+User ID = 1
+
+Stream 1
+Stream 2
+Stream 3
+Stream 4
+```
+
+All these streams belong to the same user.
+
+---
+
+# 🔄 Data Flow
+
+## User Registration
+
+```text
+User Registers
+      ↓
+Data Saved In Users Table
+```
+
+---
+
+## User Login
+
+```text
+User Login
+      ↓
+Credentials Verified
+      ↓
+JWT Token Generated
+      ↓
+Token Returned
+```
+
+---
+
+## Stream Creation
+
+```text
+User Creates Stream
+      ↓
+Data Saved In Streams Table
+      ↓
+Kafka Event Generated
+      ↓
+Kafka Topic Receives Event
+      ↓
+Kafka Consumer Processes Event
+```
+
+---
+
+# 📊 Example Database State
+
+## Users Table
+
+```text
+ID | Username | Email
+
+1  | Ayush    | ayush@gmail.com
+2  | Poojitha | poojitha@gmail.com
+```
+
+## Streams Table
+
+```text
+ID | Title              | Owner_ID
+
+1  | Kafka Test Stream  | 1
+2  | Gaming Stream      | 1
+3  | Frontend Demo      | 2
+```
+
+This shows that:
+
+- User 1 owns two streams.
+- User 2 owns one stream.
+- Ownership is managed using the owner_id field.
 
 # 📚 Important Files
 
