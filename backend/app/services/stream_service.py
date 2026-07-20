@@ -29,3 +29,23 @@ def get_my_streams(db: Session, owner_id: int):
     return db.query(Stream).filter(
         Stream.owner_id == owner_id
     ).all()
+
+def delete_stream(
+    db: Session,
+    stream_id: int,
+    owner_id: int
+):
+    stream = db.query(Stream).filter(
+        Stream.id == stream_id
+    ).first()
+
+    if not stream:
+        return None
+
+    if stream.owner_id != owner_id:
+        return False
+
+    db.delete(stream)
+    db.commit()
+
+    return True

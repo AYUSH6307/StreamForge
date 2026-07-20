@@ -10,7 +10,7 @@ from app.schemas.stream import (
 
 from app.services.dependencies import get_current_user
 #from app.services.stream_service import create_stream, get_all_streams
-from app.services.stream_service import (create_stream,get_all_streams,get_my_streams)
+from app.services.stream_service import (create_stream,get_all_streams,get_my_streams, delete_stream)
 
 
 router = APIRouter(
@@ -49,3 +49,24 @@ def my_streams(
         db,
         current_user.id
     )
+
+
+@router.delete("/{stream_id}")
+def remove_stream(
+    stream_id: int,
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    result = delete_stream(
+        db,
+        stream_id,
+        current_user.id
+    )
+
+    if result is None:
+        return {"message": "Stream not found"}
+
+    if result is False:
+        return {"message": "Not allowed"}
+
+    return {"message": "Stream deleted successfully"}
