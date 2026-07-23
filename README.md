@@ -476,7 +476,7 @@ Kafka Consumer Processes Event
 ID | Username | Email
 
 1  | Ayush    | ayush@gmail.com
-2  | Poojitha | poojitha@gmail.com
+2  | Aryan | aryan@gmail.com
 ```
 
 ## Streams Table
@@ -634,30 +634,201 @@ Upcoming modules:
 
 # 👥 Team Responsibilities
 
-## Ayush
-
-- Backend Development
-- Kafka Integration
-- Final Project Integration
-
-## Frontend Team
-
-- React Setup
-- UI Development
-- API Integration
-
-## Testing Team
-
-- API Testing
-- Bug Reporting
-
-## Documentation Team
-
-- Report Writing
-- PPT Preparation
-- Project Documentation
+This section defines the responsibilities of each team member during project development.
 
 ---
+
+## 👑 Ayush Patel (Project Lead)
+
+### Responsibilities
+
+- Backend Development
+- FastAPI APIs
+- JWT Authentication
+- Stream CRUD Operations
+- Kafka Integration
+- GitHub Repository Management
+- Pull Request Review
+- Final Integration
+- Testing & Deployment
+
+### Current Work Completed
+
+- User Registration
+- User Login
+- JWT Authentication
+- Protected Routes
+- SQLite Integration
+- Stream CRUD
+- Kafka Producer
+- Kafka Consumer
+- Docker Setup
+
+---
+
+## 👩 Poojitha
+
+### Module
+
+Frontend Development
+
+### Responsibilities
+
+- React Setup
+- Login Page
+- Register Page
+- Dashboard UI
+- Navigation Components
+- API Integration Support
+
+### Technologies
+
+- React
+- Bootstrap
+- Axios
+
+---
+
+## 👩 Kavya
+
+### Module
+
+Frontend Development
+
+### Responsibilities
+
+- Dashboard Components
+- UI Styling
+- Forms
+- User Experience Improvements
+- Frontend Testing
+
+### Technologies
+
+- React
+- Bootstrap
+- CSS
+
+---
+
+## 👩 Ramya
+
+### Module
+
+Dashboard Visualization
+
+### Responsibilities
+
+- React Flow Integration
+- System Topology Visualization
+- Kafka Flow Monitoring UI
+- Dashboard Graph Components
+
+### Technologies
+
+- React
+- React Flow
+
+---
+
+## 👨 Kavya Bandaru
+
+### Module
+
+IoT Data Producer
+
+### Responsibilities
+
+- Truck Telemetry Generator
+- Temperature Generator
+- Speed Generator
+- Location Generator
+- Kafka Producer Integration
+
+### Technologies
+
+- Python
+- Apache Kafka
+
+
+---
+
+## 👨 Nishun
+
+### Module
+
+Documentation & Research
+
+### Responsibilities
+
+- Project Documentation
+- README Maintenance
+- PPT Preparation
+- Research On:
+  - Faust / Bytewax
+  - RocksDB
+  - Prometheus
+- API Testing Documentation
+
+### Deliverables
+
+- Documentation
+- Research Notes
+- PPT Content
+- Testing Reports
+
+---
+
+# 🌿 Git Workflow
+
+Each team member must work on a separate branch.
+
+```bash
+git checkout -b frontend-poojitha
+git checkout -b frontend-kavya
+git checkout -b dashboard-ramya
+git checkout -b iot-kavyabandaru
+git checkout -b docs-nishun
+```
+
+After completing work:
+
+```bash
+git add .
+git commit -m "Module Update"
+git push origin branch-name
+```
+
+Do not push directly to the main branch.
+
+All changes should be reviewed and merged by the Project Lead.
+
+---
+
+# 📌 Current Development Phase
+
+### ✅ Completed
+
+- Backend Foundation
+- Authentication
+- Database Integration
+- Kafka Infrastructure
+- Stream CRUD Operations
+
+### 🔄 In Progress
+
+- Frontend Development
+- Dashboard Visualization
+- IoT Data Producer
+- Documentation
+
+### 🚀 Upcoming
+
+- Stream Processing (Faust / Bytewax)
+- State Management (RocksDB)
+- Monitoring (Prometheus)
+- Final Integration
+- Deployment
 
 # 🚀 Running The Project
 
@@ -721,25 +892,6 @@ Always test your code before pushing.
 
 ---
 
-# Current Project Status
-
-Backend Development Progress:
-
-🟩🟩🟩🟩🟩🟩🟩🟩⬜⬜
-
-Approximate Completion: 80%
-
-Frontend Development Progress:
-
-⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜
-
-Approximate Completion: 0%
-
-Overall Project Progress:
-
-🟩🟩🟩🟩🟩🟩⬜⬜⬜⬜
-
-Approximate Completion: 60%
 
 
 
