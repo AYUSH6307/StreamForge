@@ -731,7 +731,7 @@ Dashboard Visualization
 
 ---
 
-## 👨 Kavya Bandaru
+## 👨 Nishun
 
 ### Module
 
@@ -753,7 +753,7 @@ IoT Data Producer
 
 ---
 
-## 👨 Nishun
+## 👨 Kavya Bandaru
 
 ### Module
 
@@ -787,8 +787,8 @@ Each team member must work on a separate branch.
 git checkout -b frontend-poojitha
 git checkout -b frontend-kavya
 git checkout -b dashboard-ramya
-git checkout -b iot-kavyabandaru
-git checkout -b docs-nishun
+git checkout -b iot-nishun
+git checkout -b docs-kavyabandaru
 ```
 
 After completing work:
