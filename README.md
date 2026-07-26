@@ -666,7 +666,7 @@ This section defines the responsibilities of each team member during project dev
 
 ---
 
-## 👩 Poojitha
+## 👩 Poojitha + ## 👩 Kavya
 
 ### Module
 
@@ -674,42 +674,25 @@ Frontend Development
 
 ### Responsibilities
 
-- React Setup
-- Login Page
-- Register Page
-- Dashboard UI
+### Responsibilities
+
+- React Project Setup
+- Login & Registration Page Development
+- Dashboard UI Development
+- Dashboard Components Development
 - Navigation Components
-- API Integration Support
-
-### Technologies
-
-- React
-- Bootstrap
-- Axios
-
----
-
-## 👩 Kavya
-
-### Module
-
-Frontend Development
-
-### Responsibilities
-
-- Dashboard Components
-- UI Styling
-- Forms
+- Responsive UI Design & Styling
+- Form Development and Validation
+- API Integration Support using Axios
 - User Experience Improvements
-- Frontend Testing
+- Frontend Testing & Bug Fixing
 
 ### Technologies
 
-- React
+- React.js
 - Bootstrap
 - CSS
-
----
+- Axios
 
 ## 👩 Ramya
 
@@ -731,7 +714,7 @@ Dashboard Visualization
 
 ---
 
-## 👨 Kavya Bandaru
+## 👨 Nishun
 
 ### Module
 
@@ -753,7 +736,7 @@ IoT Data Producer
 
 ---
 
-## 👨 Nishun
+## 👨 Kavya Bandaru
 
 ### Module
 
