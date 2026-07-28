@@ -1,13 +1,13 @@
-from kafka import KafkaProducer
-import json
-
-producer = KafkaProducer(
-    bootstrap_servers="localhost:9092",
-    value_serializer=lambda v: json.dumps(v).encode("utf-8")
-)
+from app.services.kafka_manager import get_producer
 
 
 def send_stream_event(event_type: str, data: dict):
+    producer = get_producer()
+
+    if producer is None:
+        print(f"⚠️ Kafka unavailable. Event skipped: {event_type}")
+        return
+
     producer.send(
         "stream-events",
         {
@@ -15,4 +15,5 @@ def send_stream_event(event_type: str, data: dict):
             "data": data
         }
     )
+
     producer.flush()
