@@ -19,14 +19,14 @@ def create_stream(
     db.add(db_stream)
     db.commit()
     db.refresh(db_stream)
-    send_stream_event(
-    "stream_created",
-    {
+
+    # Kafka Event
+    send_stream_event({
+        "event": "stream_created",
         "stream_id": db_stream.id,
         "title": db_stream.title,
         "owner_id": db_stream.owner_id
-    }
-)
+    })
 
     return db_stream
 
@@ -34,10 +34,12 @@ def create_stream(
 def get_all_streams(db: Session):
     return db.query(Stream).all()
 
+
 def get_my_streams(db: Session, owner_id: int):
     return db.query(Stream).filter(
         Stream.owner_id == owner_id
     ).all()
+
 
 def delete_stream(
     db: Session,
@@ -58,6 +60,7 @@ def delete_stream(
     db.commit()
 
     return True
+
 
 def update_stream(
     db: Session,
@@ -85,6 +88,7 @@ def update_stream(
     db.refresh(stream)
 
     return stream
+
 
 def get_stream_by_id(
     db: Session,
