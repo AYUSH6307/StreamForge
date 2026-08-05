@@ -1,64 +1,82 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getCurrentUser } from "../services/authService";
 
+function Navbar() {
 
-function Navbar(){
+    const navigate = useNavigate();
 
-  return(
+    const [user, setUser] = useState(null);
 
-    <nav className="navbar navbar-dark bg-dark">
+    useEffect(() => {
 
-      <div className="container">
+        const fetchUser = async () => {
 
-        <Link 
-          className="navbar-brand"
-          to="/"
-        >
-          StreamForge
-        </Link>
+            try {
 
+                const response = await getCurrentUser();
 
-        <div>
+                setUser(response.data);
 
-          <Link 
-            className="text-white mx-3"
-            to="/"
-          >
-            Dashboard
-          </Link>
+            } catch (error) {
 
+                console.log(error);
 
-          <Link 
-            className="text-white mx-3"
-            to="/streams"
-          >
-            Streams
-          </Link>
+            }
 
+        };
 
-          <Link 
-            className="text-white mx-3"
-            to="/create"
-          >
-            Create Stream
-          </Link>
+        fetchUser();
 
+    }, []);
 
-          <Link 
-            className="text-white mx-3"
-            to="/profile"
-          >
-            Profile
-          </Link>
+    const handleLogout = () => {
 
-        </div>
+        localStorage.removeItem("token");
 
-      </div>
+        alert("Logged out successfully!");
 
-    </nav>
+        navigate("/login");
 
-  )
+    };
+
+    return (
+
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+
+            <div className="container-fluid">
+
+                <h3 className="navbar-brand">
+                    StreamForge
+                </h3>
+
+                <div className="d-flex align-items-center">
+
+                    {user && (
+
+                        <span className="text-white me-3">
+
+                            Welcome, {user.username}
+
+                        </span>
+
+                    )}
+
+                    <button
+                        className="btn btn-danger"
+                        onClick={handleLogout}
+                    >
+                        Logout
+                    </button>
+
+                </div>
+
+            </div>
+
+        </nav>
+
+    );
 
 }
-
 
 export default Navbar;

@@ -1,101 +1,89 @@
 import { useState } from "react";
+import Navbar from "../components/Navbar";
+import "../styles/CreateStream.css";
 
+function CreateStream() {
 
-function CreateStream(){
-
-    const [streamName, setStreamName] = useState("");
-    const [category, setCategory] = useState("");
+    const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
 
+    const handleCreate = (e) => {
 
-    function handleSubmit(){
+        e.preventDefault();
 
-    if(
-        streamName === "" ||
-        category === "" ||
-        description === ""
-    ){
+        if (!title || !description) {
+            alert("Please fill all fields.");
+            return;
+        }
 
-        alert("Please fill all fields");
+        console.log({
+            title,
+            description
+        });
 
-        return;
+        alert("Stream Created Successfully!");
 
-    }
+    };
 
+    return (
+        <>
+            <Navbar />
 
-    alert("Stream Created Successfully!");
+            <div className="create-container">
 
-    console.log(streamName);
-    console.log(category);
-    console.log(description);
+                <div className="create-card">
 
-}
+                    <h2>Create New Stream</h2>
 
+                    <form onSubmit={handleCreate}>
 
-    return(
+                        <div className="mb-3">
 
-        <div className="container mt-5">
+                            <label className="form-label">
+                                Stream Title
+                            </label>
 
-            <div className="card shadow p-4">
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter Stream Title"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                            />
 
-                <h2 className="fw-bold mb-4">
-                    Create New Stream
-                </h2>
+                        </div>
 
+                        <div className="mb-3">
 
-                <label className="mb-2">
-                    Stream Name
-                </label>
+                            <label className="form-label">
+                                Description
+                            </label>
 
-                <input 
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter stream name"
-                    value={streamName}
-                    onChange={(e)=>setStreamName(e.target.value)}
-                />
+                            <textarea
+                                className="form-control"
+                                rows="4"
+                                placeholder="Enter Description"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                            ></textarea>
 
+                        </div>
 
-                <label className="mb-2">
-                    Category
-                </label>
+                        <button
+                            className="btn btn-success w-100"
+                            type="submit"
+                        >
+                            Create Stream
+                        </button>
 
-                <input 
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter category"
-                    value={category}
-                    onChange={(e)=>setCategory(e.target.value)}
-                />
+                    </form>
 
-
-                <label className="mb-2">
-                    Description
-                </label>
-
-                <textarea
-                    className="form-control mb-3"
-                    placeholder="Enter description"
-                    value={description}
-                    onChange={(e)=>setDescription(e.target.value)}
-                />
-
-
-                <button 
-                    className="btn btn-primary"
-                    onClick={handleSubmit}
-                >
-                    Create Stream 🚀
-                </button>
-
+                </div>
 
             </div>
 
-        </div>
-
-    )
-
+        </>
+    );
 }
-
 
 export default CreateStream;

@@ -83,7 +83,7 @@ def get_stream(
 @router.delete("/{stream_id}")
 def remove_stream(
     stream_id: int,
-    current_user = Depends(get_current_user),
+    current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     result = delete_stream(
@@ -93,12 +93,20 @@ def remove_stream(
     )
 
     if result is None:
-        return {"message": "Stream not found"}
+        raise HTTPException(
+            status_code=404,
+            detail="Stream not found"
+        )
 
     if result is False:
-        return {"message": "Not allowed"}
+        raise HTTPException(
+            status_code=403,
+            detail="You are not allowed to delete this stream"
+        )
 
-    return {"message": "Stream deleted successfully"}
+    return {
+        "message": "Stream deleted successfully"
+    }
 
 
 @router.put("/{stream_id}",

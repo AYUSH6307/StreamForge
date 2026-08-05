@@ -1,84 +1,146 @@
-import DashboardCard from "../components/DashboardCard";
-import StreamCard from "../components/StreamCard";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
+import CreateStream from "../components/CreateStream";
+import Navbar from "../components/Navbar";
+
+import {
+    deleteStream,
+    getStreams,
+} from "../services/streamService";
+
+import "../styles/Dashboard.css";
 
 function Dashboard() {
 
+    const navigate = useNavigate();
 
-  const streams = [
-    {
-      name:"React Tutorial",
-      category:"Programming"
-    },
-    {
-      name:"Python Basics",
-      category:"Programming"
-    },
-    {
-      name:"AI Workshop",
-      category:"Artificial Intelligence"
+    const [streams, setStreams] = useState([]);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+    if (!token) {
+        navigate("/login");
+        return;
     }
-  ];
+        loadStreams();
+    }, [navigate]);
+
+    const loadStreams = async () => {
+
+        try {
+
+            const response = await getStreams();
+
+            setStreams(response.data);
+
+        } catch (error) {
+
+            console.log(error);
+
+            alert("Unable to load streams");
+
+        }
+
+    };
+
+    const handleDelete = async (id) => {
+
+    const confirmDelete = window.confirm(
+        "Are you sure you want to delete this stream?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+
+        await deleteStream(id);
+
+        alert("Stream deleted successfully!");
+
+        loadStreams();
+
+    } catch (error) {
+
+        console.log(error);
+
+        if (error.response) {
+        alert(error.response.data.detail);
+    } else {
+        alert("Unable to connect to server.");
+    }
 
 
-  return (
+    }
 
-    <div className="container mt-5">
+};
 
+    return (
 
-      <h2 className="fw-bold mb-4">
-        Dashboard
-      </h2>
+        <>
+            <Navbar />
 
+            <div className="dashboard">
 
-      <div className="row">
+                <h1 className="title">
+                    StreamForge Dashboard
+                </h1>
 
-        <DashboardCard 
-          title="Total Streams"
-          value="120"
-        />
+                {/* Create Stream Form */}
+                <CreateStream loadStreams={loadStreams} />
 
+                {streams.length === 0 ? (
 
-        <DashboardCard 
-          title="Active Users"
-          value="350"
-        />
+                    <h4 style={{ color: "white" }}>
+                        No Streams Available
+                    </h4>
 
+                ) : (
 
-        <DashboardCard 
-          title="Revenue"
-          value="₹25,000"
-        />
+                    streams.map((stream) => (
 
-      </div>
+                        <div
+                            className="stream-card"
+                            key={stream.id}
+                        >
 
+                            <h3>{stream.title}</h3>
 
-      <hr />
+                            <p>{stream.description}</p>
 
+                            <div className="buttons">
 
-      <h3 className="mt-4">
-        Recent Streams
-      </h3>
+                                <button
+                                    className="btn btn-warning"
+                                    onClick={() =>
+                                        navigate(`/edit-stream/${stream.id}`)
+                                    }
+                                >
+                                    Edit
+                                </button>
 
+                                <button
+                                    className="btn btn-danger"
+                                    onClick={() => handleDelete(stream.id)}
+                                >
+                                    Delete
+                                </button>
 
-      {
-        streams.map((stream,index)=>(
+                            </div>
 
-          <StreamCard
-            key={index}
-            name={stream.name}
-            category={stream.category}
-          />
+                        </div>
 
-        ))
-      }
+                    ))
 
+                )}
 
-    </div>
+            </div>
 
-  );
+        </>
+
+    );
 
 }
-
 
 export default Dashboard;

@@ -1,0 +1,26 @@
+.create-container{
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:90vh;
+    background:black;
+
+}
+
+.create-card{
+
+    width:500px;
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(255,255,255,.2);
+
+}
+
+.create-card h2{
+
+    text-align:center;
+    margin-bottom:25px;
+
+}
