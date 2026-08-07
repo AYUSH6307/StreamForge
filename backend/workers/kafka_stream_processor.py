@@ -60,26 +60,6 @@ parsed = op.map(
 )
 
 
-def extract_timestamp(event):
-    return event["event_time"]
-
-
-
-clock = EventClock(
-    ts_getter=extract_timestamp,
-    wait_for_system_duration=timedelta(seconds=0),
-)
-
-
-windower = TumblingWindower(
-    length=timedelta(seconds=5),
-    align_to=datetime(
-        2026,
-        1,
-        1,
-        tzinfo=timezone.utc,
-    ),
-)   
 
 
 # Add processing flag
@@ -116,7 +96,7 @@ windowed = count_window(
     up=processed,
     clock=clock,
     windower=windower,
-    key=lambda e: "all_events",
+   key=lambda e: str(e["owner_id"]),
 )
 
 # Print output
@@ -125,7 +105,11 @@ op.inspect("processed-events", processed)
 formatted = op.map(
     "format-window",
     windowed.down,
-    lambda item: f"Window {item[1][0]} -> Total Events: {item[1][1]}"
+    lambda item: {
+        "key": item[0],
+        "window_id": item[1][0],
+        "total_events": item[1][1],
+    },
 )
 
 op.inspect(

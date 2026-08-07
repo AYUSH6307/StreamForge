@@ -2,8 +2,8 @@ from fastapi import FastAPI
 
 from contextlib import asynccontextmanager
 from app.services.kafka_manager import connect_kafka
-
 from fastapi.middleware.cors import CORSMiddleware
+
 
 from app.api.routes import router
 from app.api.user_routes import router as user_router
@@ -37,7 +37,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "http://127.0.0.1:3000",
-        "http://localhost:3001"
+        "http://localhost:3001",
+        "http://127.0.0.1:3001",
     ],
     allow_credentials=True,
     allow_methods=["*"],
