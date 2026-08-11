@@ -2,24 +2,29 @@
 
 ## Real-Time Stream Management Platform
 
-StreamForge is a full-stack Real-Time Stream Management Platform built using **FastAPI**, **React.js**, **SQLite**, **JWT Authentication**, and **Apache Kafka**.
+StreamForge is a full-stack **Real-Time Stream Management Platform** built using **FastAPI, React.js, SQLite, JWT Authentication, Apache Kafka, and Bytewax**.
 
-The platform allows authenticated users to create, manage, update, and delete streams while demonstrating secure authentication, event-driven architecture, and modern full-stack development.
+The platform allows authenticated users to register, log in, and create and manage streams. Stream creation generates events that are published to Apache Kafka and processed in real time using Bytewax.
 
 ---
 
 # 📌 Project Objective
 
-The objectives of StreamForge are:
+The main objectives of StreamForge are:
 
-- User Registration & Login
-- JWT Authentication
-- Protected REST APIs
-- Stream CRUD Operations
-- Apache Kafka Integration
-- Event-Driven Architecture
-- Dockerized Kafka Services
-- Team Collaboration using Git & GitHub
+* User Registration and Login
+* JWT-based Authentication
+* Protected REST APIs
+* Stream CRUD Operations
+* SQLite Database Management
+* Apache Kafka Integration
+* Kafka Producer and Consumer Workflow
+* Real-Time Event Processing using Bytewax
+* Time-Based Event Windowing
+* Event Counting
+* Dockerized Kafka and ZooKeeper Services
+* Full-Stack React + FastAPI Integration
+* Git and GitHub based Team Collaboration
 
 ---
 
@@ -27,38 +32,44 @@ The objectives of StreamForge are:
 
 ## Backend
 
-- Python
-- FastAPI
-- SQLAlchemy
-- Pydantic
-- JWT Authentication
+* Python 3.11
+* FastAPI
+* Uvicorn
+* SQLAlchemy
+* Pydantic
+* JWT Authentication
+* Passlib / Bcrypt
 
 ## Frontend
 
-- React.js
-- React Router DOM
-- Axios
-- Bootstrap
-- CSS
+* React.js
+* React Router DOM
+* Axios
+* Bootstrap
+* CSS
 
 ## Database
 
-- SQLite
+* SQLite
+* SQLAlchemy ORM
 
-## Event Streaming
+## Event Streaming & Processing
 
-- Apache Kafka
-- ZooKeeper
+* Apache Kafka
+* ZooKeeper
+* kafka-python
+* Confluent Kafka
+* Bytewax
 
 ## DevOps
 
-- Docker
-- Docker Compose
+* Docker
+* Docker Compose
 
 ## Version Control
 
-- Git
-- GitHub
+* Git
+* GitHub
 
 ---
 
@@ -68,23 +79,48 @@ The objectives of StreamForge are:
 StreamForge
 │
 ├── backend
+│   │
 │   ├── app
 │   │   ├── api
+│   │   │   ├── routes.py
+│   │   │   ├── user_routes.py
+│   │   │   └── stream_routes.py
+│   │   │
 │   │   ├── core
+│   │   │   └── database.py
+│   │   │
 │   │   ├── models
+│   │   │   ├── user.py
+│   │   │   └── stream.py
+│   │   │
 │   │   ├── schemas
+│   │   │   ├── user.py
+│   │   │   └── stream.py
+│   │   │
 │   │   ├── services
+│   │   │   ├── auth.py
+│   │   │   ├── kafka_manager.py
+│   │   │   ├── kafka_service.py
+│   │   │   ├── token_service.py
+│   │   │   ├── user_service.py
+│   │   │   └── dependencies.py
+│   │   │
 │   │   └── main.py
+│   │
+│   ├── workers
+│   │   ├── kafka_stream_processor.py
+│   │   └── stream_processor.py
+│   │
 │   └── requirements.txt
 │
 ├── frontend
 │   ├── public
-│   ├── src
-│   │   ├── components
-│   │   ├── pages
-│   │   ├── routes
-│   │   ├── services
-│   │   └── styles
+│   └── src
+│       ├── components
+│       ├── pages
+│       ├── routes
+│       ├── services
+│       └── styles
 │
 ├── kafka
 │   └── docker-compose.yml
@@ -99,408 +135,444 @@ StreamForge
 # 🏗 System Architecture
 
 ```text
-               React Frontend
-                      │
-                      ▼
-               FastAPI Backend
-          ┌───────────┴───────────┐
-          │                       │
-          ▼                       ▼
-    SQLite Database         Kafka Producer
-                                  │
-                                  ▼
-                             Kafka Topic
-                                  │
-                                  ▼
-                            Kafka Consumer
+                 React Frontend
+                       │
+                       │ HTTP / Axios
+                       ▼
+                FastAPI Backend
+                       │
+             ┌─────────┴─────────┐
+             │                   │
+             ▼                   ▼
+       SQLite Database      Kafka Producer
+                                 │
+                                 ▼
+                         Kafka Topic
+                       "stream-events"
+                                 │
+                                 ▼
+                         Bytewax Processor
+                                 │
+                    ┌────────────┴────────────┐
+                    │                         │
+                    ▼                         ▼
+              Event Processing         Window Counting
+                    │                         │
+                    └────────────┬────────────┘
+                                 ▼
+                         Processed Events
 ```
 
 ---
 
-# 🔐 Authentication Flow
+# 🔐 Authentication
+
+StreamForge implements JWT-based authentication.
+
+### Authentication Flow
 
 ```text
 User
  │
- ▼
-Register
+ ├── Register
+ │      ↓
+ │   FastAPI
+ │      ↓
+ │   SQLite
  │
- ▼
-SQLite Database
- │
- ▼
-Login
- │
- ▼
-JWT Token Generated
- │
- ▼
-Stored in Browser
- │
- ▼
-Protected API Access
+ └── Login
+        ↓
+   Verify Credentials
+        ↓
+   Generate JWT Token
+        ↓
+   React stores Token
+        ↓
+   Protected API Requests
+```
+
+Protected endpoints require a valid JWT token.
+
+---
+
+# 🌊 Stream Management
+
+Authenticated users can manage streams through REST APIs.
+
+### Supported Operations
+
+* Create Stream
+* Get All Streams
+* Get Individual Stream
+* Get Current User's Streams
+* Update Stream
+* Delete Stream
+
+Example stream:
+
+```json
+{
+  "title": "Kafka Integrated Stream",
+  "description": "Real-time stream processing test"
+}
 ```
 
 ---
 
-# 📚 API Endpoints
+# ⚡ Kafka Integration
 
-## User APIs
+Apache Kafka is used as the event streaming layer of StreamForge.
 
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| POST | /users/register | Register User |
-| POST | /users/login | Login User |
-| GET | /users/me | Get Current User |
-| PUT | /users/update | Update Profile |
-
----
-
-## Stream APIs
-
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| GET | /streams | Get All Streams |
-| GET | /streams/my | Get My Streams |
-| POST | /streams/create | Create Stream |
-| GET | /streams/{id} | Get Stream By ID |
-| PUT | /streams/{id} | Update Stream |
-| DELETE | /streams/{id} | Delete Stream |
-
----
-
-# 📊 Database Design
-
-## Users Table
-
-| Field | Type |
-|------|------|
-| id | Integer |
-| username | String |
-| email | String |
-| password | String |
-
----
-
-## Streams Table
-
-| Field | Type |
-|------|------|
-| id | Integer |
-| title | String |
-| description | String |
-| owner_id | Integer |
-
-Relationship
+When a stream is created:
 
 ```text
-One User
-     │
-     ▼
-Many Streams
-```
-
----
-
-# 🔥 Kafka Integration
-
-Whenever a stream is created:
-
-```text
-Create Stream
-      │
-      ▼
-Save to Database
-      │
-      ▼
+Stream Creation
+      ↓
+FastAPI Backend
+      ↓
 Kafka Producer
-      │
-      ▼
-Kafka Topic
-      │
-      ▼
-Kafka Consumer
-      │
-      ▼
-Event Processed
+      ↓
+stream-events Topic
 ```
 
-Producer File
-
-```
-backend/app/services/kafka_service.py
-```
-
-Consumer File
-
-```
-backend/app/services/kafka_consumer.py
-```
-
----
-
-# 💻 Frontend Features
-
-- User Registration
-- User Login
-- JWT Authentication
-- Protected Dashboard
-- Create Stream
-- View Streams
-- Edit Stream
-- Delete Stream
-- Navbar with Logged-in User
-- Logout
-
----
-
-# ⚙ Backend Features
-
-- FastAPI REST APIs
-- SQLite Database
-- SQLAlchemy ORM
-- JWT Authentication
-- User Management
-- Stream CRUD Operations
-- Kafka Producer
-- Kafka Consumer
-- Docker Integration
-- Swagger Documentation
-
----
-
-# 📌 Project Workflow
+The Kafka topic used by the project is:
 
 ```text
-User Registers
-      │
-      ▼
-User Login
-      │
-      ▼
-JWT Token Generated
-      │
-      ▼
-Dashboard
-      │
-      ▼
-Create Stream
-      │
-      ▼
-SQLite Database
-      │
-      ▼
-Kafka Producer
-      │
-      ▼
-Kafka Topic
-      │
-      ▼
-Kafka Consumer
+stream-events
+```
+
+Kafka and ZooKeeper are configured using Docker Compose.
+
+---
+
+# 🔄 Bytewax Real-Time Processing
+
+Bytewax is used to process Kafka events in real time.
+
+The processing pipeline performs:
+
+1. Kafka event consumption
+2. JSON decoding
+3. Event validation
+4. Timestamp parsing
+5. Event processing
+6. Time-based windowing
+7. Event counting
+
+### Bytewax Flow
+
+```text
+Kafka
+  ↓
+Kafka Input
+  ↓
+JSON Decode
+  ↓
+Event Validation
+  ↓
+Timestamp Parsing
+  ↓
+Event Processing
+  ↓
+5-Second Tumbling Window
+  ↓
+Event Count
+```
+
+Example processed event:
+
+```json
+{
+  "event": "stream_created",
+  "stream_id": 1,
+  "title": "Kafka Integrated",
+  "owner_id": 2,
+  "processed": true
+}
 ```
 
 ---
 
-# 🚀 Running The Project
+# 📊 Window-Based Event Processing
 
-## Clone Repository
+StreamForge uses a **5-second tumbling window** for event counting.
 
-```bash
-git clone <repository-url>
+The Bytewax processor groups incoming events into fixed time windows and calculates the number of events received in each window.
+
+Example:
+
+```text
+Window
+  │
+  ├── Event 1
+  ├── Event 2
+  └── Event 3
+        ↓
+Total Events = 3
 ```
+
+This demonstrates real-time stream aggregation.
 
 ---
 
-## Backend Setup
+# 🐳 Kafka Docker Setup
 
-```bash
-cd backend
+Kafka and ZooKeeper are containerized using Docker Compose.
 
-pip install -r requirements.txt
-
-uvicorn app.main:app --reload --port 8001
-```
-
-Backend
-
-```
-http://127.0.0.1:8001
-```
-
-Swagger
-
-```
-http://127.0.0.1:8001/docs
-```
-
----
-
-## Kafka Setup
+Start the services:
 
 ```bash
 cd kafka
+docker compose up -d
+```
 
+Check running containers:
+
+```bash
+docker ps
+```
+
+The Kafka broker runs on:
+
+```text
+127.0.0.1:9092
+```
+
+The project Kafka topic is:
+
+```text
+stream-events
+```
+
+---
+
+# ▶️ Running the Project
+
+## 1. Start Kafka
+
+```bash
+cd kafka
 docker compose up -d
 ```
 
 ---
 
-## Frontend Setup
+## 2. Start Backend
+
+Activate the Python environment and run:
+
+```bash
+cd backend
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8001
+```
+
+Backend:
+
+```text
+http://127.0.0.1:8001
+```
+
+Swagger API documentation:
+
+```text
+http://127.0.0.1:8001/docs
+```
+
+---
+
+## 3. Start Bytewax Processor
+
+From the project root:
+
+```bash
+python -m bytewax.run backend.workers.kafka_stream_processor
+```
+
+The processor consumes events from:
+
+```text
+stream-events
+```
+
+and performs real-time processing and window-based counting.
+
+---
+
+## 4. Start Frontend
 
 ```bash
 cd frontend
-
-npm install
-
 npm start
 ```
 
-Frontend
+Frontend:
 
-```
+```text
 http://localhost:3000
 ```
 
 ---
 
-# ✅ Features Completed
+# 🔗 End-to-End Workflow
 
-- User Registration
-- User Login
-- JWT Authentication
-- Protected Routes
-- SQLite Integration
-- Stream CRUD Operations
-- User Ownership Validation
-- Kafka Producer
-- Kafka Consumer
-- Docker Setup
-- React Frontend
-- Dashboard
-- Axios API Integration
-- Swagger Documentation
-- GitHub Version Control
+The complete StreamForge workflow is:
 
----
-
-# 🔄 Future Enhancements
-
-- Stream Analytics Dashboard
-- Live Kafka Monitoring
-- Notifications
-- PostgreSQL Migration
-- Cloud Deployment
-- Unit Testing
-- Performance Monitoring
-
----
-
-# 👥 Team Members
-
-## 👨‍💻 Ayush Patel (Project Lead)
-
-### Responsibilities
-
-- Backend Development
-- FastAPI API Development
-- JWT Authentication
-- Stream CRUD Operations
-- Apache Kafka Integration
-- GitHub Repository Management
-- Pull Request Review
-- Final Integration
-- Testing & Deployment
-
----
-
-## 👩 Poojitha
-
-### Module
-
-Frontend Development
-
-### Responsibilities
-
-- Login Page
-- Registration Page
-- Dashboard UI
-- React Components
-- Form Validation
-- Axios API Integration
-- Responsive UI Design
-
----
-
-## 👩 Ramya
-
-### Module
-
-Dashboard Visualization
-
-### Responsibilities
-
-- Dashboard Design
-- UI Components
-- Stream Visualization
-- Dashboard Improvements
-
----
-
-## 👨 Nishun
-
-### Module
-
+```text
+User
+  ↓
+React Frontend
+  ↓
+Login / JWT Authentication
+  ↓
+FastAPI Backend
+  ↓
+Stream Creation
+  ↓
+SQLite Database
+  ↓
 Kafka Producer
+  ↓
+Kafka: stream-events
+  ↓
+Bytewax
+  ↓
+Event Validation
+  ↓
+Timestamp Processing
+  ↓
+5-Second Window
+  ↓
+Event Count
+```
 
-### Responsibilities
-
-- Kafka Producer
-- Sample Stream Events
-- Event Testing
+This demonstrates a complete **event-driven real-time processing architecture**.
 
 ---
 
-## 👩 Kavya
+# 👥 Team
 
-### Module
-
-Documentation
+## Ayush Patel — Project Lead
 
 ### Responsibilities
 
-- README Documentation
-- PPT Preparation
-- API Documentation
-- Project Reports
+* Backend Development
+* FastAPI API Development
+* JWT Authentication
+* Stream CRUD Operations
+* Apache Kafka Integration
+* Bytewax Integration
+* GitHub Repository Management
+* Pull Request Review
+* Final Integration
+* Testing
+
+---
+
+## Poojitha — Frontend Development
+
+### Responsibilities
+
+* Login Page
+* Registration Page
+* Dashboard UI
+* React Components
+* Form Validation
+* Axios API Integration
+* Responsive UI
+
+---
+
+## Ramya — Dashboard & Visualization
+
+### Responsibilities
+
+* Dashboard Design
+* UI Components
+* Stream Visualization
+* Dashboard Improvements
+
+---
+
+## Nishun — Kafka Module
+
+### Responsibilities
+
+* Kafka Producer
+* Stream Events
+* Kafka Event Testing
+* Event Integration
+
+---
+
+## Kavya — Documentation
+
+### Responsibilities
+
+* README Documentation
+* API Documentation
+* PPT Preparation
+* Project Reports
 
 ---
 
 # 🌿 Git Workflow
 
-Create a Branch
+Create a feature branch:
 
 ```bash
 git checkout -b feature-name
 ```
 
-Commit Changes
+Add changes:
 
 ```bash
 git add .
+```
 
+Commit changes:
+
+```bash
 git commit -m "Added Feature"
 ```
 
-Push Changes
+Push the branch:
 
 ```bash
 git push origin feature-name
 ```
 
-Project Lead reviews the Pull Request before merging into the main branch.
+The Project Lead reviews changes before merging them into the `main` branch.
+
+---
+
+# 🧪 Current Working Features
+
+The following features have been implemented and tested:
+
+* ✅ User Registration
+* ✅ User Login
+* ✅ JWT Authentication
+* ✅ Protected APIs
+* ✅ Stream Creation
+* ✅ Stream Listing
+* ✅ Stream Update
+* ✅ Stream Deletion
+* ✅ SQLite Database
+* ✅ React Frontend
+* ✅ FastAPI Backend
+* ✅ Axios API Integration
+* ✅ Kafka Producer
+* ✅ Kafka Topic
+* ✅ Kafka Consumer Integration
+* ✅ Bytewax Processing
+* ✅ Timestamp Processing
+* ✅ 5-Second Event Windowing
+* ✅ Event Counting
+* ✅ Dockerized Kafka & ZooKeeper
+* ✅ End-to-End Frontend → Backend → Kafka → Bytewax Flow
 
 ---
 
 # 📄 License
 
-This project is developed for educational purposes as a team project demonstrating modern full-stack application development using FastAPI, React.js, JWT Authentication, SQLite, Apache Kafka, Docker, and GitHub.
+This project is developed for **educational purposes** as a team project demonstrating full-stack development and real-time event processing using FastAPI, React.js, SQLite, JWT Authentication, Apache Kafka, Bytewax, Docker, and GitHub.
