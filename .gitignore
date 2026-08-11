@@ -229,3 +229,4 @@ __pycache__/
 
 node_modules/
 frontend-old/
+streamforge.db

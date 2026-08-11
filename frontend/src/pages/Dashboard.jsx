@@ -4,10 +4,15 @@ import { useNavigate } from "react-router-dom";
 import CreateStream from "../components/CreateStream";
 import Navbar from "../components/Navbar";
 
+
 import {
     deleteStream,
     getStreams,
 } from "../services/streamService";
+
+import { getStats } from "../services/statsService";
+
+
 
 import "../styles/Dashboard.css";
 
@@ -16,6 +21,7 @@ function Dashboard() {
     const navigate = useNavigate();
 
     const [streams, setStreams] = useState([]);
+    const [stats, setStats] = useState([]);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -25,6 +31,7 @@ function Dashboard() {
         return;
     }
         loadStreams();
+        loadStats();
     }, [navigate]);
 
     const loadStreams = async () => {
@@ -44,6 +51,22 @@ function Dashboard() {
         }
 
     };
+    const loadStats = async () => {
+
+    try {
+
+        const response = await getStats();
+        
+
+        setStats(response.data);
+
+    } catch (error) {
+
+        console.log("Unable to load stats:", error);
+
+    }
+
+};
 
     const handleDelete = async (id) => {
 
@@ -89,6 +112,30 @@ function Dashboard() {
 
                 {/* Create Stream Form */}
                 <CreateStream loadStreams={loadStreams} />
+                <div className="stats-section">
+    <h2>Stream Statistics</h2>
+
+    {stats.length === 0 ? (
+        <p>No statistics available</p>
+    ) : (
+        <div className="stats-grid">
+            {stats.map((stat, index) => (
+                <div className="stat-card" key={index}>
+                    <h3>Owner {stat.owner_id}</h3>
+
+                    <p>
+                        <strong>Window:</strong> {stat.window_id}
+                    </p>
+
+                    <p>
+                        <strong>Total Events:</strong>{" "}
+                        {stat.total_events}
+                    </p>
+                </div>
+            ))}
+        </div>
+    )}
+</div>
 
                 {streams.length === 0 ? (
 

@@ -1,5 +1,5 @@
-from kafka import KafkaProducer
 import json
+from kafka import KafkaProducer
 from datetime import datetime, timezone
 
 
@@ -12,8 +12,10 @@ producer = KafkaProducer(
 
 def send_stream_event(event):
     event["timestamp"] = datetime.now(timezone.utc).isoformat()
+
     producer.send(
         "stream-events",
         value=event
     )
+
     producer.flush()

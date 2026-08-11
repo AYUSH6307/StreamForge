@@ -4,6 +4,8 @@ from bytewax.connectors.kafka import operators as kop
 import json
 from datetime import datetime
 from datetime import timedelta, timezone
+from app.core.database import SessionLocal
+from app.services.stats_service import save_stream_stat
 
 from bytewax.operators.windowing import (
     EventClock,
@@ -102,6 +104,26 @@ windowed = count_window(
 # Print output
 op.inspect("processed-events", processed)
 
+
+def save_window_stat(item):
+    key = item["key"]
+    window_id = item["window_id"]
+    total_events = item["total_events"]
+
+    db = SessionLocal()
+
+    try:
+        save_stream_stat(
+            db=db,
+            owner_id=int(key),
+            window_id=window_id,
+            total_events=total_events
+        )
+    finally:
+        db.close()
+
+    return item
+
 formatted = op.map(
     "format-window",
     windowed.down,
@@ -116,3 +138,16 @@ op.inspect(
     "window-count",
     formatted,
 )
+
+saved_stats = op.map(
+    "save-stats",
+    formatted,
+    save_window_stat
+)
+
+op.inspect(
+    "saved-stats",
+    saved_stats
+)
+
+

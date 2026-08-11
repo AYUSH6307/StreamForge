@@ -11,8 +11,10 @@ from app.api.user_routes import router as user_router
 from app.core.database import Base, engine
 from app.models.user import User
 from app.models.stream import Stream
+from app.models.stat import StreamStat
 
 from app.api.stream_routes import router as stream_router
+from app.api.stats_routes import router as stats_router
 
 Base.metadata.create_all(bind=engine)
 
@@ -48,3 +50,4 @@ app.add_middleware(
 app.include_router(router)
 app.include_router(user_router)
 app.include_router(stream_router)
+app.include_router(stats_router)
