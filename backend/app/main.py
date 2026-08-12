@@ -15,6 +15,7 @@ from app.models.stat import StreamStat
 
 from app.api.stream_routes import router as stream_router
 from app.api.stats_routes import router as stats_router
+from prometheus_fastapi_instrumentator import Instrumentator
 
 Base.metadata.create_all(bind=engine)
 
@@ -34,13 +35,15 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+
+Instrumentator().instrument(app).expose(app)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
         "http://127.0.0.1:3000",
-        "http://localhost:3001",
-        "http://127.0.0.1:3001",
+        
     ],
     allow_credentials=True,
     allow_methods=["*"],

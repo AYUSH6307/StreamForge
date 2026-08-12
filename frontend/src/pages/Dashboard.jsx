@@ -12,6 +12,15 @@ import {
 
 import { getStats } from "../services/statsService";
 
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer
+} from "recharts";
 
 
 import "../styles/Dashboard.css";
@@ -114,6 +123,31 @@ function Dashboard() {
                 <CreateStream loadStreams={loadStreams} />
                 <div className="stats-section">
     <h2>Stream Statistics</h2>
+    {stats.length > 0 && (
+    <div style={{ width: "100%", height: 350 }}>
+        <ResponsiveContainer>
+            <BarChart data={stats}>
+                <CartesianGrid strokeDasharray="3 3" />
+
+                <XAxis
+                    dataKey="window_id"
+                    tick={{ fill: "white" }}
+                />
+
+                <YAxis
+                    tick={{ fill: "white" }}
+                />
+
+                <Tooltip />
+
+                <Bar
+                    dataKey="total_events"
+                    fill="#00bfff"
+                />
+            </BarChart>
+        </ResponsiveContainer>
+    </div>
+)}
 
     {stats.length === 0 ? (
         <p>No statistics available</p>

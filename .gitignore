@@ -230,3 +230,10 @@ __pycache__/
 node_modules/
 frontend-old/
 streamforge.db
+
+# Bytewax runtime/recovery state
+backend/bytewax-recovery/
+
+# Generated source dumps
+backend_source.txt
+frontend_source.txt
