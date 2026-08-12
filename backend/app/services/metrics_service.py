@@ -1,6 +1,6 @@
-from prometheus_client import Counter
+from prometheus_client import Gauge
 
-events_processed = Counter(
+events_processed = Gauge(
     "streamforge_events_processed_total",
     "Total number of events processed by StreamForge"
 )

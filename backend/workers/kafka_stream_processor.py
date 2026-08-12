@@ -8,7 +8,6 @@ from app.core.database import SessionLocal
 from app.services.stats_service import save_stream_stat
 
 
-from app.services.metrics_service import events_processed
 
 from bytewax.operators.windowing import (
     EventClock,
@@ -113,7 +112,7 @@ def save_window_stat(item):
     window_id = item["window_id"]
     total_events = item["total_events"]
 
-    events_processed.inc(total_events)
+    
 
     db = SessionLocal()
 
