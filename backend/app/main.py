@@ -20,6 +20,8 @@ from app.models.stat import StreamStat
 from app.services.metrics_service import events_processed
 from app.services.stats_service import get_stream_stats
 
+from app.api.health_routes import router as health_router
+
 
 Base.metadata.create_all(bind=engine)
 
@@ -94,3 +96,4 @@ app.include_router(router)
 app.include_router(user_router)
 app.include_router(stream_router)
 app.include_router(stats_router)
+app.include_router(health_router)

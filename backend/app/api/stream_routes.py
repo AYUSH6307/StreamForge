@@ -44,7 +44,7 @@ def create_new_stream(
         current_user.id
     )
 
-@router.get("/", response_model=list[StreamResponse])
+@router.get("", response_model=list[StreamResponse])
 def get_streams(
     db: Session = Depends(get_db)
 ):
@@ -109,12 +109,14 @@ def remove_stream(
     }
 
 
-@router.put("/{stream_id}",
-            response_model=StreamResponse)
+@router.put(
+    "/{stream_id}",
+    response_model=StreamResponse
+)
 def edit_stream(
     stream_id: int,
     stream: StreamUpdate,
-    current_user = Depends(get_current_user),
+    current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     result = update_stream(
@@ -137,4 +139,3 @@ def edit_stream(
         )
 
     return result
-

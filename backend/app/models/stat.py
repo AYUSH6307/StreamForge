@@ -9,11 +9,22 @@ class StreamStat(Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
-    owner_id = Column(Integer, nullable=False, index=True)
+    owner_id = Column(
+        Integer,
+        nullable=False,
+        index=True
+    )
 
-    window_id = Column(Integer, nullable=False)
+    window_id = Column(
+        String,
+        nullable=False
+    )
 
-    total_events = Column(Integer, nullable=False, default=0)
+    total_events = Column(
+        Integer,
+        nullable=False,
+        default=0
+    )
 
     created_at = Column(
         DateTime,

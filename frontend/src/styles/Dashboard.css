@@ -78,3 +78,61 @@ body{
 .stat-card p {
     margin: 8px 0;
 }
+
+.processing-section {
+    margin: 30px 0;
+    color: white;
+}
+
+.processing-section h2 {
+    margin-bottom: 20px;
+}
+
+.processing-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.processing-card {
+    background: #111827;
+    border: 1px solid #374151;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+}
+
+.processing-card h3 {
+    margin-bottom: 10px;
+}
+
+.processing-card p {
+    font-size: 24px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.last-event-card {
+    margin-top: 20px;
+    background: #111827;
+    border: 1px solid #374151;
+    border-radius: 12px;
+    padding: 20px;
+    color: white;
+}
+
+.last-event-card p {
+    margin: 8px 0;
+}
+
+@media (max-width: 900px) {
+    .processing-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .processing-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -3,9 +3,11 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import CreateStream from "./pages/CreateStream";
 import EditStream from "./pages/EditStream";
+import Topology from "./pages/Topology";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
+
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 
@@ -35,6 +37,11 @@ function App() {
                     <Route
                         path="/edit-stream/:id"
                         element={<EditStream />}
+                    />
+
+                    <Route
+                        path="/topology"
+                        element={<Topology />}
                     />
 
                 </Route>

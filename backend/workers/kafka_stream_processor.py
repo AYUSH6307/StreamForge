@@ -6,6 +6,7 @@ from datetime import datetime
 from datetime import timedelta, timezone
 from app.core.database import SessionLocal
 from app.services.stats_service import save_stream_stat
+from app.services.rocksdb_service import save_window_stat as save_rocksdb_stat
 
 
 
@@ -13,6 +14,12 @@ from bytewax.operators.windowing import (
     EventClock,
     TumblingWindower,
     count_window,
+)
+
+from app.services.processing_monitor import (
+    mark_processor_online,
+    record_event,
+    record_window,
 )
 
 BROKERS = ["127.0.0.1:9092"]
@@ -67,13 +74,23 @@ parsed = op.map(
 
 
 # Add processing flag
+def process_event(event):
+    mark_processor_online()
+
+    processed_event = {
+        **event,
+        "processed": True,
+    }
+
+    record_event(processed_event)
+
+    return processed_event
+
+
 processed = op.map(
     "process-event",
     parsed,
-    lambda e: {
-        **e,
-        "processed": True,
-    },
+    process_event,
 )
 
 def extract_timestamp(event):
@@ -111,20 +128,32 @@ def save_window_stat(item):
     key = item["key"]
     window_id = item["window_id"]
     total_events = item["total_events"]
+    record_window(
+        window_id=window_id,
+        total_events=total_events,
+    )
 
-    
+    owner_id = int(key)
 
+    # Save in SQLite
     db = SessionLocal()
 
     try:
         save_stream_stat(
             db=db,
-            owner_id=int(key),
+            owner_id=owner_id,
             window_id=window_id,
             total_events=total_events
         )
     finally:
         db.close()
+
+    # Save persistent state in RocksDB
+    save_rocksdb_stat(
+        owner_id=owner_id,
+        window_id=window_id,
+        total_events=total_events
+    )
 
     return item
 

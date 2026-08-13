@@ -237,3 +237,15 @@ backend/bytewax-recovery/
 # Generated source dumps
 backend_source.txt
 frontend_source.txt
+# StreamForge runtime data
+data/
+grafana-backup/
+
+# Grafana local backup/database
+grafana.db
+# StreamForge runtime data
+data/
+grafana-backup/
+
+# Grafana local backup/database
+grafana.db

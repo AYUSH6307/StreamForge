@@ -61,6 +61,12 @@ function Navbar() {
                         </span>
 
                     )}
+                    <button
+                         className="btn btn-info me-2"
+                         onClick={() => navigate("/topology")}
+                    >
+                        Topology
+                    </button>
 
                     <button
                         className="btn btn-danger"

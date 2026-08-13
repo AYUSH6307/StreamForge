@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import {
-    getStreamById,
+    getStream,
     updateStream,
 } from "../services/streamService";
 
@@ -22,7 +22,7 @@ function EditStream() {
 
         try {
 
-            const response = await getStreamById(id);
+            const response = await getStream(id);
 
             setTitle(response.data.title);
 

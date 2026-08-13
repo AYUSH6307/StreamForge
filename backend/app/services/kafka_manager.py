@@ -3,6 +3,7 @@ import json
 
 producer = None
 
+
 def connect_kafka():
     global producer
 
@@ -14,6 +15,7 @@ def connect_kafka():
             bootstrap_servers="localhost:9092",
             value_serializer=lambda v: json.dumps(v).encode("utf-8")
         )
+
         print("✅ Kafka Producer Connected")
 
     except Exception as e:
@@ -24,4 +26,12 @@ def connect_kafka():
 
 
 def get_producer():
+    global producer
+
+    if producer is None:
+        return connect_kafka()
+
     return producer
+
+
+connect_kafka()
