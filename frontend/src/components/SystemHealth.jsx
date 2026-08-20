@@ -135,10 +135,13 @@ function SystemHealth() {
                 />
 
                 <InfoCard
-                    title="Last Event"
-                    value={health.last_event || "None"}
-                />
-
+    title="Last Event"
+    value={
+        health.last_event
+            ? `${health.last_event.truck_id || "Unknown"} | ${health.last_event.temperature ?? "N/A"}°C | ${health.last_event.speed ?? "N/A"} km/h | ${health.last_event.latitude ?? "N/A"}, ${health.last_event.longitude ?? "N/A"}`
+            : "None"
+    }
+/>
                 <InfoCard
                     title="Last Window"
                     value={health.last_window_id || "None"}

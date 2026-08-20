@@ -1,6 +1,6 @@
 from fastapi import FastAPI,Response
 from contextlib import asynccontextmanager
-
+from datetime import datetime, timezone
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
@@ -16,9 +16,19 @@ from app.core.database import Base, engine, SessionLocal
 from app.models.user import User
 from app.models.stream import Stream
 from app.models.stat import StreamStat
+from app.models.processing_status import ProcessingStatus
 
-from app.services.metrics_service import events_processed
-from app.services.stats_service import get_stream_stats
+from app.services.metrics_service import (
+    events_processed,
+    active_workers,
+    events_throughput,
+    last_window_id,
+    last_window_event_count,
+)
+from app.services.processing_monitor import (
+    get_processing_status,
+)
+
 
 from app.api.health_routes import router as health_router
 
@@ -50,34 +60,114 @@ Instrumentator().instrument(app).expose(
     endpoint="/http-metrics"
 )
 
+# =========================================================
+# METRICS
+# =========================================================
 
 @app.get("/metrics")
 def metrics():
     """
-    StreamForge custom Prometheus metrics.
-    Reads the latest processed-event count from the database.
+    Expose StreamForge application metrics.
+
+    Throughput is calculated exclusively by the Bytewax
+    processor and stored in ProcessingStatus. This endpoint
+    only synchronizes Prometheus gauges with that stored state.
     """
 
-    db = SessionLocal()
+    processing = get_processing_status()
 
-    try:
-        stats = get_stream_stats(db)
+    # -----------------------------------------------------
+    # TOTAL PROCESSED EVENTS
+    # -----------------------------------------------------
 
-        total_events = sum(
-            stat.total_events
-            for stat in stats
+    events_processed.set(
+        float(processing.get("processed_events", 0) or 0)
+    )
+
+    # -----------------------------------------------------
+    # WORKER STATUS
+    # -----------------------------------------------------
+
+    worker_status = processing.get("status")
+
+    last_event_time = processing.get("last_event_time")
+
+    worker_active = False
+
+    if worker_status == "online" and last_event_time:
+
+        try:
+            last_update = datetime.fromisoformat(
+                last_event_time
+            )
+
+            if last_update.tzinfo is None:
+                last_update = last_update.replace(
+                    tzinfo=timezone.utc
+                )
+
+            age = (
+                datetime.now(timezone.utc) - last_update
+            ).total_seconds()
+
+            # Worker is considered active if an event
+            # was processed within the last 15 seconds.
+            worker_active = age <= 15
+
+        except (ValueError, TypeError):
+            worker_active = False
+
+    active_workers.set(
+        1 if worker_active else 0
+    )
+
+    # -----------------------------------------------------
+    # THROUGHPUT
+    # -----------------------------------------------------
+    #
+    # IMPORTANT:
+    # Do NOT calculate throughput here.
+    #
+    # Bytewax processor is the single source of truth.
+    #
+
+    throughput = float(
+        processing.get("throughput", 0.0) or 0.0
+    )
+
+    events_throughput.set(throughput)
+
+        # -----------------------------------------------------
+    # LAST PROCESSING WINDOW
+    # -----------------------------------------------------
+
+    window_id = processing.get("last_window_id")
+
+    if window_id is not None:
+        try:
+            last_window_id.set(
+                float(window_id)
+            )
+        except (ValueError, TypeError):
+            last_window_id.set(0)
+
+    last_window_event_count.set(
+        float(
+            processing.get(
+                "last_window_count",
+                0
+            ) or 0
         )
+    )
 
-        events_processed.set(total_events)
+    # -----------------------------------------------------
+    # RETURN PROMETHEUS METRICS
+    # -----------------------------------------------------
 
-        return Response(
-            content=generate_latest(),
-            media_type=CONTENT_TYPE_LATEST
-        )
-        
-
-    finally:
-        db.close()
+    return Response(
+        content=generate_latest(),
+        media_type=CONTENT_TYPE_LATEST,
+    )
 
 
 app.add_middleware(

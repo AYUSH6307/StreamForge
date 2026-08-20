@@ -20,7 +20,10 @@ function Navbar() {
 
             } catch (error) {
 
-                console.log(error);
+                console.log(
+                    "Unable to load current user:",
+                    error
+                );
 
             }
 
@@ -30,56 +33,49 @@ function Navbar() {
 
     }, []);
 
-    const handleLogout = () => {
-
-        localStorage.removeItem("token");
-
-        alert("Logged out successfully!");
-
-        navigate("/login");
-
-    };
-
     return (
 
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+        <header className="top-navbar">
 
-            <div className="container-fluid">
+            {/* LEFT */}
 
-                <h3 className="navbar-brand">
+            <div
+                className="top-navbar-brand"
+                onClick={() => navigate("/dashboard")}
+            >
+
+                <span className="brand-icon">
+                    ⚡
+                </span>
+
+                <span>
                     StreamForge
-                </h3>
-
-                <div className="d-flex align-items-center">
-
-                    {user && (
-
-                        <span className="text-white me-3">
-
-                            Welcome, {user.username}
-
-                        </span>
-
-                    )}
-                    <button
-                         className="btn btn-info me-2"
-                         onClick={() => navigate("/topology")}
-                    >
-                        Topology
-                    </button>
-
-                    <button
-                        className="btn btn-danger"
-                        onClick={handleLogout}
-                    >
-                        Logout
-                    </button>
-
-                </div>
+                </span>
 
             </div>
 
-        </nav>
+
+            {/* RIGHT */}
+
+            <div className="top-navbar-user">
+
+                {user && (
+
+                    <span className="welcome-user">
+
+                        Welcome,{" "}
+
+                        <strong>
+                            {user.username}
+                        </strong>
+
+                    </span>
+
+                )}
+
+            </div>
+
+        </header>
 
     );
 

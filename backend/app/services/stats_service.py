@@ -12,7 +12,7 @@ def save_stream_stat(
     stat = StreamStat(
         owner_id=owner_id,
         window_id=window_id,
-        total_events=total_events
+        total_events=total_events,
     )
 
     db.add(stat)
@@ -22,9 +22,29 @@ def save_stream_stat(
     return stat
 
 
-def get_stream_stats(db: Session):
+def get_stream_stats(
+    db: Session,
+    owner_id: int
+):
     return (
         db.query(StreamStat)
-        .order_by(StreamStat.created_at.desc())
+        .filter(
+            StreamStat.owner_id == owner_id
+        )
+        .order_by(
+            StreamStat.created_at.desc()
+        )
+        .all()
+    )
+
+
+def get_all_stream_stats(
+    db: Session
+):
+    return (
+        db.query(StreamStat)
+        .order_by(
+            StreamStat.created_at.desc()
+        )
         .all()
     )

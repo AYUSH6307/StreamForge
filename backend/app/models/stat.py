@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, DateTime
 from datetime import datetime, timezone
+
+from sqlalchemy import Column, Integer, DateTime
 
 from app.core.database import Base
 
@@ -7,7 +8,11 @@ from app.core.database import Base
 class StreamStat(Base):
     __tablename__ = "stream_stats"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(
+        Integer,
+        primary_key=True,
+        index=True
+    )
 
     owner_id = Column(
         Integer,
@@ -16,8 +21,9 @@ class StreamStat(Base):
     )
 
     window_id = Column(
-        String,
-        nullable=False
+        Integer,
+        nullable=False,
+        index=True
     )
 
     total_events = Column(

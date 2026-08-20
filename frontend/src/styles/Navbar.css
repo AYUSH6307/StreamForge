@@ -1,0 +1,394 @@
+/* =========================================================
+   STREAMFORGE SIDEBAR
+   ========================================================= */
+
+.sidebar {
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    bottom: 0;
+
+    width: 240px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #0b1220 0%,
+            #070b14 100%
+        );
+
+    border-right: 1px solid #1f2937;
+
+    padding: 24px 16px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    z-index: 1000;
+
+    box-shadow:
+        8px 0 30px rgba(0, 0, 0, 0.25);
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.sidebar-logo {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 4px 8px 24px;
+
+    border-bottom: 1px solid #1f2937;
+}
+
+.logo-icon {
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00bfff,
+            #2563eb
+        );
+
+    font-size: 21px;
+
+    box-shadow:
+        0 0 20px rgba(0, 191, 255, 0.25);
+}
+
+.sidebar-logo h2 {
+
+    margin: 0;
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: 700;
+}
+
+.sidebar-logo span {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #6b7280;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   USER
+   ========================================================= */
+
+.sidebar-user {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 18px 8px;
+
+    margin-bottom: 8px;
+}
+
+.user-avatar {
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #172033;
+
+    border: 1px solid #26344d;
+
+    color: #00bfff;
+
+    font-weight: 700;
+}
+
+.user-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+}
+
+.user-label {
+
+    color: #6b7280;
+
+    font-size: 10px;
+
+    margin-bottom: 2px;
+}
+
+.user-info strong {
+
+    color: #d1d5db;
+
+    font-size: 13px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   SECTION TITLE
+   ========================================================= */
+
+.sidebar-section-title {
+
+    color: #4b5563;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.2px;
+
+    padding: 12px 12px 8px;
+}
+
+.project-title {
+
+    margin-top: 14px;
+}
+
+
+/* =========================================================
+   NAVIGATION BUTTON
+   ========================================================= */
+
+.sidebar-link {
+
+    width: 100%;
+
+    border: none;
+
+    background: transparent;
+
+    color: #9ca3af;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 11px 12px;
+
+    margin: 3px 0;
+
+    border-radius: 9px;
+
+    text-align: left;
+
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.sidebar-link:hover {
+
+    background: #111827;
+
+    color: white;
+
+    transform: translateX(2px);
+}
+
+.sidebar-link.active {
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0, 191, 255, 0.16),
+            rgba(0, 191, 255, 0.04)
+        );
+
+    color: #00bfff;
+
+    border-left: 3px solid #00bfff;
+
+    padding-left: 9px;
+}
+
+.sidebar-icon {
+
+    width: 20px;
+
+    text-align: center;
+
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   BOTTOM AREA
+   ========================================================= */
+
+.sidebar-bottom {
+
+    margin-top: auto;
+
+    padding-top: 15px;
+
+    border-top: 1px solid #1f2937;
+}
+
+
+/* =========================================================
+   SYSTEM STATUS
+   ========================================================= */
+
+.sidebar-status {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #7f8ba3;
+
+    font-size: 11px;
+
+    padding: 8px 10px 14px;
+}
+
+.status-dot {
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow:
+        0 0 8px rgba(34, 197, 94, 0.8);
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+.sidebar-logout {
+
+    width: 100%;
+
+    border: 1px solid #263244;
+
+    background: #0d1422;
+
+    color: #9ca3af;
+
+    padding: 10px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    font-size: 12px;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.sidebar-logout:hover {
+
+    background: rgba(239, 68, 68, 0.1);
+
+    border-color: #ef4444;
+
+    color: #ef4444;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .sidebar {
+
+        width: 210px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .sidebar {
+
+        position: relative;
+
+        width: 100%;
+
+        height: auto;
+
+        min-height: auto;
+
+        padding: 15px;
+
+    }
+
+    .sidebar-bottom {
+
+        margin-top: 15px;
+    }
+
+}
